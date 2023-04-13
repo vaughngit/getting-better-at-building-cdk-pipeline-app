@@ -1,0 +1,2962 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "alarmF25EE33D": {
+      "Properties": {
+        "AlarmDescription": "no-deploy",
+        "AlarmName": "something-broke-alarm",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "EvaluationPeriods": 1,
+        "MetricName": "SomethingBroke",
+        "Namespace": "DOP-401",
+        "Period": 300,
+        "Statistic": "Average",
+        "Threshold": 1,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "pipelinewithchangecontrolBuildStageProject441BE6E9": {
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE",
+        },
+        "Cache": {
+          "Type": "NO_CACHE",
+        },
+        "EncryptionKey": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+            "Arn",
+          ],
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/amazonlinux2-x86_64-standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": true,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolBuildStageProjectRoleB650FA4D",
+            "Arn",
+          ],
+        },
+        "Source": {
+          "BuildSpec": "{
+  "version": "0.2",
+  "phases": {
+    "install": {
+      "runtime-versions": {
+        "nodejs": 16
+      },
+      "commands": [
+        "yarn install"
+      ]
+    },
+    "build": {
+      "commands": [
+        "echo Build started on \`date\`",
+        "yarn build",
+        "yarn cdk synth"
+      ]
+    },
+    "post_build": {
+      "commands": [
+        "echo Build completed on \`date\`"
+      ]
+    }
+  },
+  "artifacts": {
+    "files": [
+      "cdk.out/**/*",
+      "node_modules/**/*",
+      "lib/*"
+    ]
+  }
+}",
+          "Type": "CODEPIPELINE",
+        },
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "pipelinewithchangecontrolBuildStageProjectRoleB650FA4D": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolBuildStageProjectRoleDefaultPolicyF1BEF0DD": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "pipelinewithchangecontrolBuildStageProject441BE6E9",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "pipelinewithchangecontrolBuildStageProject441BE6E9",
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codebuild:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":report-group/",
+                    {
+                      "Ref": "pipelinewithchangecontrolBuildStageProject441BE6E9",
+                    },
+                    "-*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolBuildStageProjectRoleDefaultPolicyF1BEF0DD",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolBuildStageProjectRoleB650FA4D",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolDeployStageProject88397BC5": {
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE",
+        },
+        "Cache": {
+          "Type": "NO_CACHE",
+        },
+        "EncryptionKey": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+            "Arn",
+          ],
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "Image": "aws/codebuild/amazonlinux2-x86_64-standard:4.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": true,
+          "Type": "LINUX_CONTAINER",
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolDeployStageProjectRole553DD45A",
+            "Arn",
+          ],
+        },
+        "Source": {
+          "BuildSpec": "{
+  "version": "0.2",
+  "phases": {
+    "install": {
+      "runtime-versions": {
+        "nodejs": 16
+      },
+      "commands": [
+        "npm install -g aws-cdk"
+      ]
+    },
+    "build": {
+      "commands": [
+        "echo Deploy started on \`date\`",
+        "cdk deploy --app cdk.out"
+      ]
+    },
+    "post_build": {
+      "commands": [
+        "echo Deploy completed on \`date\`"
+      ]
+    }
+  }
+}",
+          "Type": "CODEPIPELINE",
+        },
+      },
+      "Type": "AWS::CodeBuild::Project",
+    },
+    "pipelinewithchangecontrolDeployStageProjectRole553DD45A": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolDeployStageProjectRoleDefaultPolicy9CDC2E39": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "pipelinewithchangecontrolDeployStageProject88397BC5",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":logs:",
+                      {
+                        "Ref": "AWS::Region",
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":log-group:/aws/codebuild/",
+                      {
+                        "Ref": "pipelinewithchangecontrolDeployStageProject88397BC5",
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codebuild:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":report-group/",
+                    {
+                      "Ref": "pipelinewithchangecontrolDeployStageProject88397BC5",
+                    },
+                    "-*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "cloudformation:DescribeStacks",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":role/cdk-hnb659fds-deploy-role-*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":role/cdk-hnb659fds-lookup-role-*",
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":role/cdk-hnb659fds-file-publishing-role-*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolDeployStageProjectRoleDefaultPolicy9CDC2E39",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolDeployStageProjectRole553DD45A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolOnEventHandler8D4541B7": {
+      "DependsOn": [
+        "pipelinewithchangecontrolOnEventHandlerServiceRoleDefaultPolicy2BCE5E3A",
+        "pipelinewithchangecontrolOnEventHandlerServiceRole8997E3B4",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "bc298300d9bb2bd7eed37151d7ebb2bf8d9badb77477a9c2eb9ead4b74044e0a.zip",
+        },
+        "Description": "src/time-windows/calendar/calendar-setup.lambda.ts",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolOnEventHandlerServiceRole8997E3B4",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "pipelinewithchangecontrolOnEventHandlerServiceRole8997E3B4": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolOnEventHandlerServiceRoleDefaultPolicy2BCE5E3A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ssm:CreateDocument",
+                "ssm:UpdateDocument",
+                "ssm:DeleteDocument",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":document/calendar.ics",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolOnEventHandlerServiceRoleDefaultPolicy2BCE5E3A",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolOnEventHandlerServiceRole8997E3B4",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolPipeline64D5ED6C": {
+      "DependsOn": [
+        "pipelinewithchangecontrolPipelineRoleDefaultPolicy57072A9A",
+        "pipelinewithchangecontrolPipelineRole39FF0AAC",
+      ],
+      "Properties": {
+        "ArtifactStore": {
+          "EncryptionKey": {
+            "Id": {
+              "Fn::GetAtt": [
+                "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+                "Arn",
+              ],
+            },
+            "Type": "KMS",
+          },
+          "Location": {
+            "Ref": "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+          },
+          "Type": "S3",
+        },
+        "Name": "pipeline-with-change-control",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolPipelineRole39FF0AAC",
+            "Arn",
+          ],
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeCommit",
+                  "Version": "1",
+                },
+                "Configuration": {
+                  "BranchName": "main",
+                  "PollForSourceChanges": false,
+                  "RepositoryName": {
+                    "Fn::GetAtt": [
+                      "workshoprepo93162093",
+                      "Name",
+                    ],
+                  },
+                },
+                "Name": "CodeCommitSource",
+                "OutputArtifacts": [
+                  {
+                    "Name": "SourceOutput",
+                  },
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineSourceCodeCommitSourceCodePipelineActionRole6F8D42A8",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Source",
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "pipelinewithchangecontrolBuildStageProject441BE6E9",
+                  },
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "SourceOutput",
+                  },
+                ],
+                "Name": "BuildAction",
+                "OutputArtifacts": [
+                  {
+                    "Name": "BuildOutput",
+                  },
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineBuildBuildActionCodePipelineActionRole0CE05E5B",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Build",
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1",
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "pipelinewithchangecontrolDeployStageProject88397BC5",
+                  },
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "BuildOutput",
+                  },
+                ],
+                "Name": "DeployAction",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineDeployDeployActionCodePipelineActionRoleF0D6C1F3",
+                    "Arn",
+                  ],
+                },
+                "RunOrder": 1,
+              },
+            ],
+            "Name": "Deploy",
+          },
+        ],
+      },
+      "Type": "AWS::CodePipeline::Pipeline",
+    },
+    "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+                    "Arn",
+                  ],
+                },
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "KeyPolicy": {
+          "Statement": [
+            {
+              "Action": "kms:*",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKeyAliasC4FF0191": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AliasName": "alias/codepipeline-testpipelinewithchangecontrolpipeline63962d06",
+        "TargetKeyId": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::KMS::Alias",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "pipelinewithchangecontrolPipelineArtifactsBucketPolicyA0AB5BA1": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*",
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "pipelinewithchangecontrolPipelineBuildBuildActionCodePipelineActionRole0CE05E5B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolPipelineBuildBuildActionCodePipelineActionRoleDefaultPolicyFF2FBB5E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolBuildStageProject441BE6E9",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolPipelineBuildBuildActionCodePipelineActionRoleDefaultPolicyFF2FBB5E",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolPipelineBuildBuildActionCodePipelineActionRole0CE05E5B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolPipelineDeployDeployActionCodePipelineActionRoleDefaultPolicy4B31EE93": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolDeployStageProject88397BC5",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolPipelineDeployDeployActionCodePipelineActionRoleDefaultPolicy4B31EE93",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolPipelineDeployDeployActionCodePipelineActionRoleF0D6C1F3",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolPipelineDeployDeployActionCodePipelineActionRoleF0D6C1F3": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolPipelineEventsRoleDefaultPolicy57E77145": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "codepipeline:StartPipelineExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codepipeline:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":",
+                    {
+                      "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolPipelineEventsRoleDefaultPolicy57E77145",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolPipelineEventsRoleE5CF1194",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolPipelineEventsRoleE5CF1194": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolPipelineRole39FF0AAC": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codepipeline.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolPipelineRoleDefaultPolicy57072A9A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineSourceCodeCommitSourceCodePipelineActionRole6F8D42A8",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineBuildBuildActionCodePipelineActionRole0CE05E5B",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineDeployDeployActionCodePipelineActionRoleF0D6C1F3",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolPipelineRoleDefaultPolicy57072A9A",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolPipelineRole39FF0AAC",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolPipelineSourceCodeCommitSourceCodePipelineActionRole6F8D42A8": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolPipelineSourceCodeCommitSourceCodePipelineActionRoleDefaultPolicy29B0663E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "pipelinewithchangecontrolPipelineArtifactsBucket2BC2F763",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey",
+                "kms:Encrypt",
+                "kms:ReEncrypt*",
+                "kms:GenerateDataKey*",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "pipelinewithchangecontrolPipelineArtifactsBucketEncryptionKey4FB133E5",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "codecommit:GetBranch",
+                "codecommit:GetCommit",
+                "codecommit:UploadArchive",
+                "codecommit:GetUploadArchiveStatus",
+                "codecommit:CancelUploadArchive",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "workshoprepo93162093",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolPipelineSourceCodeCommitSourceCodePipelineActionRoleDefaultPolicy29B0663E",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolPipelineSourceCodeCommitSourceCodePipelineActionRole6F8D42A8",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolProviderframeworkonEvent3130116A": {
+      "DependsOn": [
+        "pipelinewithchangecontrolProviderframeworkonEventServiceRoleDefaultPolicy8EFA5D5A",
+        "pipelinewithchangecontrolProviderframeworkonEventServiceRole616D03AA",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "903be65b9594a9f17d7120273620367e7830b6d087fc9591f31dc5a080049e46.zip",
+        },
+        "Description": "AWS CDK resource provider framework - onEvent (test/pipeline-with-change-control/Provider)",
+        "Environment": {
+          "Variables": {
+            "USER_ON_EVENT_FUNCTION_ARN": {
+              "Fn::GetAtt": [
+                "pipelinewithchangecontrolOnEventHandler8D4541B7",
+                "Arn",
+              ],
+            },
+          },
+        },
+        "Handler": "framework.onEvent",
+        "Role": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolProviderframeworkonEventServiceRole616D03AA",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "pipelinewithchangecontrolProviderframeworkonEventServiceRole616D03AA": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolProviderframeworkonEventServiceRoleDefaultPolicy8EFA5D5A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "pipelinewithchangecontrolOnEventHandler8D4541B7",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "pipelinewithchangecontrolOnEventHandler8D4541B7",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolProviderframeworkonEventServiceRoleDefaultPolicy8EFA5D5A",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolProviderframeworkonEventServiceRole616D03AA",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolSSMCalendarCustomResource05289EE7": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolProviderframeworkonEvent3130116A",
+            "Arn",
+          ],
+        },
+        "calendarBody": "BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//AWS//Change Calendar 1.0//EN
+X-CALENDAR-TYPE:DEFAULT_OPEN
+X-WR-CALDESC:Generated by script from unprocessed_calendar.ics on 2022-11-11 05:36:38 -0800
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20230120T160000Z
+DTEND:20230122T160000Z
+SUMMARY:Chinese New Year
+UID:0beae7cf-0697-4e5c-a1b0-fde84e3ed12b
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210517T070000Z
+DTEND:20210518T100000Z
+SUMMARY:US Tax Filing Peak
+UID:527d5866-4986-4147-bdbf-803f0f5b35a1
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191128T080000Z
+DTEND:20191129T080000Z
+SUMMARY:Thanksgiving Day (US)
+UID:1c382553-ca04-4fea-8751-842ba6876b3f
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201130T080000Z
+DTEND:20201201T080000Z
+SUMMARY:Cyber Monday / re:Invent
+UID:a0765a96-57f1-4a2d-945e-e21c969dfd69
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210201T080000Z
+DTEND:20210202T080000Z
+SUMMARY:US Corporate Tax Filing Peak
+UID:97fb30cf-8917-488a-8505-f7b629d264c1
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210125T080000Z
+DTEND:20210127T080000Z
+SUMMARY:US Corporate Tax Filing Peak
+UID:268f1b71-c799-45dc-bc7f-3d8875f2902e
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201215T080000Z
+DTEND:20201216T080000Z
+SUMMARY:re:Invent (Keynotes\\, Launches)
+UID:f8c452ff-9026-4e0d-b206-785ab5263672
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201209T080000Z
+DTEND:20201210T080000Z
+SUMMARY:re:Invent
+UID:21efbd20-e073-4dc3-bec9-2d7a526207e1
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201225T080000Z
+DTEND:20201226T080000Z
+SUMMARY:Christmas Day
+UID:744075bf-0335-4291-a003-79824dd30354
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20211224T010000Z
+DTEND:20211226T080000Z
+SUMMARY:Christmas Eve / Christmas
+UID:68649201-5568-4f2a-8510-8b4524945b75
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191231T080000Z
+DTEND:20200102T080000Z
+SUMMARY:New Years Holiday
+UID:efc16cd9-5e1a-4955-8743-a19e39338b86
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210210T160000Z
+DTEND:20210212T160000Z
+SUMMARY:Chinese New Year
+UID:413a8be1-794c-4f16-b84e-da464873341a
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201208T080000Z
+DTEND:20201209T080000Z
+SUMMARY:re:Invent (Keynotes\\, Launches)
+UID:377ddb18-3b54-406e-b057-dcdbe45092a1
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200714T070000Z
+DTEND:20200716T100000Z
+SUMMARY:Amended US Tax Filing Deadline
+UID:378b705b-0c90-4be5-9912-1c40c0be673d
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210207T080000Z
+DTEND:20210208T080000Z
+SUMMARY:Super Bowl LV
+UID:8c41b62c-bb0b-4b40-8e8e-22ec3d154b5b
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20221128T080000Z
+DTEND:20221202T080000Z
+SUMMARY:re:Invent
+UID:7fa1fc12-66c0-40ee-9ac6-a25360c40468
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210120T050000Z
+DTEND:20210121T100000Z
+SUMMARY:Inauguration Day
+UID:35b57abc-f20b-474f-bbe4-9bd8b184bc0d
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20220131T160000Z
+DTEND:20220201T160000Z
+SUMMARY:Chinese New Year
+UID:a8a87c7a-1eec-4e75-bb95-ccce177a5efa
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20220929T210000Z
+DTEND:20220930T050000Z
+SUMMARY:Thursday Night Football 2022
+UID:6ff33bd5-b3b4-4e63-9ca2-e0fb1903fef0
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200409T070000Z
+DTEND:20200411T070000Z
+SUMMARY:Tax Deadlines
+UID:3f536050-dadd-4022-8077-aa0cafab1c56
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20221224T010000Z
+DTEND:20221227T080000Z
+SUMMARY:Christmas
+UID:f260352a-b54f-42f0-a61c-00fab63e7892
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191130T080000Z
+DTEND:20191201T080000Z
+SUMMARY:Two Days After Thanksgiving
+UID:c7378368-ad38-4ce3-ad79-b7a088173602
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200202T080000Z
+DTEND:20200203T080000Z
+SUMMARY:Tax Deadlines/Super Bowl
+UID:96c6f6dc-8c4d-4c9d-aa98-c4bf52e08399
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200127T080000Z
+DTEND:20200202T080000Z
+SUMMARY:Tax Deadlines
+UID:2a3bba7d-977a-42d9-9661-03eb27df6dc4
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200423T220000Z
+DTEND:20200424T040000Z
+SUMMARY:NFL Draft
+UID:adab9e8f-458c-4bf8-ba2e-765783a3af0f
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210120T050000Z
+DTEND:20210121T100000Z
+SUMMARY:Inauguration Day
+UID:bd76f57b-30ec-4e93-90d8-735182fa4d18
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210207T080000Z
+DTEND:20210208T080000Z
+SUMMARY:Super Bowl LV
+UID:1e485aab-8de7-485f-989b-955a9272f89e
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191129T080000Z
+DTEND:20191130T080000Z
+SUMMARY:Day After Thanksgiving
+UID:16a4f5fa-b011-4b10-998e-788b730de5eb
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201127T080000Z
+DTEND:20201128T080000Z
+SUMMARY:Black Friday
+UID:5bd21716-7417-49b0-af4e-80e4a3c54f8e
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200409T070000Z
+DTEND:20200411T070000Z
+SUMMARY:Tax Deadlines
+UID:dc96f8dc-d522-436d-95a7-5077067815cc
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20220922T210000Z
+DTEND:20220923T050000Z
+SUMMARY:Thursday Night Football 2022
+UID:7b815f48-0f23-4832-8a4f-32f6ba7c5694
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200411T070000Z
+DTEND:20200416T070000Z
+SUMMARY:Tax Deadlines
+UID:406abc7b-8b08-45dc-ab88-30b819f0c603
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201224T010000Z
+DTEND:20201225T080000Z
+SUMMARY:Christmas Eve
+UID:7435be36-0839-41aa-b85a-83536465906a
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191201T080000Z
+DTEND:20191207T080000Z
+SUMMARY:re:Invent 2019
+UID:c16d153e-e379-4ff2-8042-b41697a00e09
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191201T080000Z
+DTEND:20191207T080000Z
+SUMMARY:re:Invent 2019
+UID:cbd20750-e5c3-4f1f-8a6d-49c79b3c9f94
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210120T050000Z
+DTEND:20210121T100000Z
+SUMMARY:Inauguration Day
+UID:917cb2a8-bcee-4e0b-a86e-eef407f15c80
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201126T010000Z
+DTEND:20201127T080000Z
+SUMMARY:US Thanksgiving
+UID:14bd7e74-3621-4986-a78a-6ada0b1a7805
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200714T070000Z
+DTEND:20200716T100000Z
+SUMMARY:Amended US Tax Filing Deadline
+UID:af1b8bc4-2d2f-439b-9d68-3f64c16f9795
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201202T080000Z
+DTEND:20201203T080000Z
+SUMMARY:re:Invent
+UID:60f451ae-241e-4391-9933-e0353b1d8e45
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20221231T080000Z
+DTEND:20230103T080000Z
+SUMMARY:New Year's
+UID:c70d691d-720d-4b69-ac64-85547d65d7c9
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210722T230000Z
+DTEND:20210723T140000Z
+SUMMARY:Tokyo Olympics Opening Ceremony
+UID:efe4db66-2649-473b-9d9d-bea19128700d
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20211231T080000Z
+DTEND:20220102T080000Z
+SUMMARY:New Year's Eve/ New Year's Day
+UID:03960c90-04bc-4694-a83d-f897fd5e0b9f
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201231T080000Z
+DTEND:20210101T080000Z
+SUMMARY:New Year's Eve
+UID:7ffc70f7-c831-450d-9ed3-b59541f54b40
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200710T070000Z
+DTEND:20200714T070000Z
+SUMMARY:Amended US Tax Filing Deadline
+UID:b8fb56e9-332d-42e6-9780-dae426434497
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191224T080000Z
+DTEND:20191226T080000Z
+SUMMARY:Christmas Holiday
+UID:187763e9-e22f-4567-bd12-a219904cd729
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210120T050000Z
+DTEND:20210121T100000Z
+SUMMARY:Inauguration Day
+UID:d7e72753-851f-47b8-971b-926be1fce1ac
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210101T080000Z
+DTEND:20210102T080000Z
+SUMMARY:New Year's Day
+UID:2827aeff-c04f-4a64-a50d-ada7240eef59
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210517T070000Z
+DTEND:20210518T100000Z
+SUMMARY:US Tax Filing Peak
+UID:108fee3c-c5fa-4501-90ae-2500b23dc9c8
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200202T080000Z
+DTEND:20200203T080000Z
+SUMMARY:Tax Deadlines/Super Bowl
+UID:f13dfc3d-f915-46ea-992f-5f0d5539a2bd
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191129T080000Z
+DTEND:20191130T080000Z
+SUMMARY:Day After Thanksgiving
+UID:9986fa14-c9c6-4000-a8df-0cef83e7714e
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210120T050000Z
+DTEND:20210121T100000Z
+SUMMARY:Inauguration Day
+UID:a704ef5e-704e-4e34-881a-ca1cac344723
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210809T140000Z
+DTEND:20210811T140000Z
+SUMMARY:Australia Census Day
+UID:e50d9f44-b61e-4a33-a99b-9dc1112e1ec6
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200202T080000Z
+DTEND:20200203T080000Z
+SUMMARY:Tax Deadlines/Super Bowl
+UID:5412b76b-913f-4680-9ac7-7408ad18fb36
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210201T080000Z
+DTEND:20210202T080000Z
+SUMMARY:US Corporate Tax Filing Peak
+UID:7e355672-0c10-4790-9b99-5d751ca68327
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201203T080000Z
+DTEND:20201204T080000Z
+SUMMARY:re:Invent (Keynotes\\, Launches)
+UID:26e306c0-10d3-4a50-a7c7-3c20992c9fbc
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20211129T080000Z
+DTEND:20211203T080000Z
+SUMMARY:re:Invent / Cyber Monday
+UID:ec310732-309b-40fb-9019-d3c966ffc801
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200202T080000Z
+DTEND:20200203T080000Z
+SUMMARY:Tax Deadlines/Super Bowl
+UID:f752a4f0-8158-4654-812a-dc385b65bd4b
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191226T080000Z
+DTEND:20191231T080000Z
+SUMMARY:Christmas Week
+UID:0b3e8b67-bac8-4f57-b264-75b11d3c101b
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201210T080000Z
+DTEND:20201211T080000Z
+SUMMARY:re:Invent (Keynotes\\, Launches)
+UID:251e59c2-9c62-4adf-ba34-9eaff57244f9
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200202T080000Z
+DTEND:20200203T080000Z
+SUMMARY:Tax Deadlines/Super Bowl
+UID:513c927f-a5d1-401b-85db-2e0e310ff6ec
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200710T070000Z
+DTEND:20200714T070000Z
+SUMMARY:Amended US Tax Filing Deadline
+UID:1a979a32-5909-4f57-86d2-9ee996c34117
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200710T070000Z
+DTEND:20200714T070000Z
+SUMMARY:Amended US Tax Filing Deadline
+UID:e0bd3d46-0280-4b9c-8195-84362f15fc99
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200127T080000Z
+DTEND:20200202T080000Z
+SUMMARY:Tax Deadlines
+UID:664b4ba7-ba43-47bc-9310-a05db2e19502
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210517T070000Z
+DTEND:20210518T100000Z
+SUMMARY:US Tax Filing Peak
+UID:9c607861-4b02-4320-ac0a-acefca471f07
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200127T080000Z
+DTEND:20200202T080000Z
+SUMMARY:Tax Deadlines
+UID:d9601d96-c176-4689-a603-af429d44df30
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20220130T160000Z
+DTEND:20220131T160000Z
+SUMMARY:Chinese New Year Eve
+UID:9374afec-cbf2-4094-a802-1b3ea506e4cf
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210207T080000Z
+DTEND:20210208T080000Z
+SUMMARY:Super Bowl LV
+UID:2d4d8947-5233-4222-bb05-f0af0de01e62
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200124T160000Z
+DTEND:20200125T160000Z
+SUMMARY:Chinese New Year's Day
+UID:a8def5ec-f3d7-479d-9af0-1a97e4a501f8
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210201T080000Z
+DTEND:20210202T080000Z
+SUMMARY:US Corporate Tax Filing Peak
+UID:8bc3209f-5d4e-43c0-b0a0-da67dc71722a
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200203T080000Z
+DTEND:20200204T080000Z
+SUMMARY:Tax Deadlines
+UID:8c5ba62a-439e-470a-a71f-68dcb25d6534
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210125T080000Z
+DTEND:20210127T080000Z
+SUMMARY:US Corporate Tax Filing Peak
+UID:7f1cea94-6e7a-44c7-a9f9-cf039309c98c
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20221015T160000Z
+DTEND:20221018T160000Z
+SUMMARY:CPC National Congress
+UID:93eb67d0-478e-4af5-adf4-c4819380862c
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20220915T210000Z
+DTEND:20220916T050000Z
+SUMMARY:Thursday Night Football 2022
+UID:4a76dc3f-5743-4e0a-832c-05cae5d0b636
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200411T070000Z
+DTEND:20200416T070000Z
+SUMMARY:Tax Deadlines
+UID:4b4e8c66-f7a6-4f9c-8796-f79855f40afe
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210120T050000Z
+DTEND:20210121T100000Z
+SUMMARY:Inauguration Day
+UID:61ba2283-81cd-45ee-9952-39649dc5526d
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20221029T070000Z
+DTEND:20221031T070000Z
+SUMMARY:Brazil Presidential Election (2nd round)
+UID:33cf447d-b141-4347-b02c-556fc96f7e5e
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210125T080000Z
+DTEND:20210127T080000Z
+SUMMARY:US Corporate Tax Filing Peak
+UID:e192826f-85f8-4c57-86ec-1aab3d4ce766
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200714T070000Z
+DTEND:20200716T100000Z
+SUMMARY:Amended US Tax Filing Deadline
+UID:2934aaaa-9e1c-4d94-b4c4-d37f403bc993
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200411T070000Z
+DTEND:20200416T070000Z
+SUMMARY:Tax Deadlines
+UID:0fbb4689-8067-46f3-b897-def071bf5352
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210210T160000Z
+DTEND:20210212T160000Z
+SUMMARY:Chinese New Year
+UID:ef510971-351d-4006-a29f-e878ee4405e4
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200203T080000Z
+DTEND:20200204T080000Z
+SUMMARY:Tax Deadlines
+UID:e7bb874b-0b3d-4ac9-b78c-6453ddb398c3
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200203T080000Z
+DTEND:20200204T080000Z
+SUMMARY:Tax Deadlines
+UID:08c995aa-40b2-4ee7-95ec-7aa23c586165
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201201T080000Z
+DTEND:20201202T080000Z
+SUMMARY:re:Invent (Keynotes\\, Launches)
+UID:83a8b2b4-718a-4f2e-9e19-6927dc6fd980
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20221001T070000Z
+DTEND:20221003T070000Z
+SUMMARY:Brazil Presidential Election (1st round)
+UID:f3257204-5751-49cb-8c0b-1410e2899e1c
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20191128T080000Z
+DTEND:20191129T080000Z
+SUMMARY:Thanksgiving Day (US)
+UID:79f4003d-367c-4c0e-ada3-052831efe89a
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200123T160000Z
+DTEND:20200124T160000Z
+SUMMARY:Chinese New Year's Eve
+UID:309624d7-e8c4-4dcb-945e-c14549b7a7ed
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210807T230000Z
+DTEND:20210808T140000Z
+SUMMARY:Tokyo Olympics Closing Ceremony
+UID:8cb9ee39-3971-4dbe-b5c0-e6887126b804
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20220930T160000Z
+DTEND:20221001T160000Z
+SUMMARY:China National Day
+UID:a5abf030-d16b-4675-9584-e2ebf8afa7ee
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201103T080000Z
+DTEND:20201104T080000Z
+SUMMARY:US General Election
+UID:cd85e634-3cd2-4eb6-820e-3abb865dd539
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210207T080000Z
+DTEND:20210208T080000Z
+SUMMARY:Super Bowl LV
+UID:72f1932f-66be-43be-915e-c92d923684f4
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20210930T160000Z
+DTEND:20211001T160000Z
+SUMMARY:China National Day
+UID:89464d98-be04-42dc-83a2-28d8211ca102
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20201102T080000Z
+DTEND:20201103T080000Z
+SUMMARY:Day Before US General Election
+UID:241e5cec-9561-4215-bbfc-2675386e14eb
+END:VEVENT
+BEGIN:VEVENT
+DTSTAMP:20221004T221405Z
+DTSTART:20200409T070000Z
+DTEND:20200411T070000Z
+SUMMARY:Tax Deadlines
+UID:7a273439-00a9-4eac-8787-1f4ecbfcff89
+END:VEVENT
+END:VCALENDAR
+",
+        "calendarName": "calendar.ics",
+        "sourceType": "path",
+      },
+      "Type": "AWS::CloudFormation::CustomResource",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaF5FCDE78": {
+      "DependsOn": [
+        "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaServiceRoleDefaultPolicy03F3D212",
+        "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaServiceRoleCEFC8170",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "fb32abb08337c0c48b8f5afad1e0d0718c2556c4d5a463e42107cb7616b6eaaa.zip",
+        },
+        "Description": "src/time-windows/change-controller/change-controller.lambda.ts",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaServiceRoleCEFC8170",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaServiceRoleCEFC8170": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaServiceRoleDefaultPolicy03F3D212": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codepipeline:EnableStageTransition",
+                "codepipeline:DisableStageTransition",
+                "codepipeline:GetPipelineState",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codepipeline:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":",
+                    {
+                      "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+                    },
+                    "*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ssm:GetCalendarState",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":document/calendar.ics",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "cloudwatch:DescribeAlarms",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaServiceRoleDefaultPolicy03F3D212",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaServiceRoleCEFC8170",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolchangecontrollerBuildScheduler3EF3E1B5": {
+      "Properties": {
+        "Name": {
+          "Ref": "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaF5FCDE78",
+        },
+        "ScheduleExpression": "rate(1 minute)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaF5FCDE78",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+            "Input": {
+              "Fn::Join": [
+                "",
+                [
+                  "{"calendar":{"calendarArn":"arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":document/calendar.ics","calendarName":"calendar.ics"},"searchTerms":["no-deploy","change-controller-error-alarm"],"stageName":"Build","pipelineName":"",
+                  {
+                    "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+                  },
+                  ""}",
+                ],
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "pipelinewithchangecontrolchangecontrollerBuildSchedulerAllowEventRuletestpipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaD3ACE9D21F28763F": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaF5FCDE78",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerBuildScheduler3EF3E1B5",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "pipelinewithchangecontrolchangecontrollerBuildchangecontrolleralarm9E24B0A8": {
+      "Properties": {
+        "AlarmDescription": "change-controller-error-alarm",
+        "AlarmName": {
+          "Fn::Join": [
+            "",
+            [
+              "ChangeController-",
+              {
+                "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+              },
+              "Build",
+            ],
+          ],
+        },
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "pipelinewithchangecontrolchangecontrollerBuildChangeControllerLambdaF5FCDE78",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaB817F78F": {
+      "DependsOn": [
+        "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaServiceRoleDefaultPolicy1EE551FD",
+        "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaServiceRole96CB6E39",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "fb32abb08337c0c48b8f5afad1e0d0718c2556c4d5a463e42107cb7616b6eaaa.zip",
+        },
+        "Description": "src/time-windows/change-controller/change-controller.lambda.ts",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaServiceRole96CB6E39",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaServiceRole96CB6E39": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaServiceRoleDefaultPolicy1EE551FD": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codepipeline:EnableStageTransition",
+                "codepipeline:DisableStageTransition",
+                "codepipeline:GetPipelineState",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codepipeline:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":",
+                    {
+                      "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+                    },
+                    "*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ssm:GetCalendarState",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":document/calendar.ics",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "cloudwatch:DescribeAlarms",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaServiceRoleDefaultPolicy1EE551FD",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaServiceRole96CB6E39",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolchangecontrollerDeployScheduler060E556B": {
+      "Properties": {
+        "Name": {
+          "Ref": "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaB817F78F",
+        },
+        "ScheduleExpression": "rate(1 minute)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaB817F78F",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+            "Input": {
+              "Fn::Join": [
+                "",
+                [
+                  "{"calendar":{"calendarArn":"arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":document/calendar.ics","calendarName":"calendar.ics"},"searchTerms":["no-deploy","change-controller-error-alarm"],"stageName":"Deploy","pipelineName":"",
+                  {
+                    "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+                  },
+                  ""}",
+                ],
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "pipelinewithchangecontrolchangecontrollerDeploySchedulerAllowEventRuletestpipelinewithchangecontrolchangecontrollerDeployChangeControllerLambda7916C793446607EB": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaB817F78F",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerDeployScheduler060E556B",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "pipelinewithchangecontrolchangecontrollerDeploychangecontrolleralarm16BB5768": {
+      "Properties": {
+        "AlarmDescription": "change-controller-error-alarm",
+        "AlarmName": {
+          "Fn::Join": [
+            "",
+            [
+              "ChangeController-",
+              {
+                "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+              },
+              "Deploy",
+            ],
+          ],
+        },
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "pipelinewithchangecontrolchangecontrollerDeployChangeControllerLambdaB817F78F",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaD899ECB0": {
+      "DependsOn": [
+        "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaServiceRoleDefaultPolicyEABB2A88",
+        "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaServiceRole478CBC0A",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "fb32abb08337c0c48b8f5afad1e0d0718c2556c4d5a463e42107cb7616b6eaaa.zip",
+        },
+        "Description": "src/time-windows/change-controller/change-controller.lambda.ts",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaServiceRole478CBC0A",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs16.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaServiceRole478CBC0A": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaServiceRoleDefaultPolicyEABB2A88": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codepipeline:EnableStageTransition",
+                "codepipeline:DisableStageTransition",
+                "codepipeline:GetPipelineState",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":codepipeline:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":",
+                    {
+                      "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+                    },
+                    "*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ssm:GetCalendarState",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":document/calendar.ics",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "cloudwatch:DescribeAlarms",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaServiceRoleDefaultPolicyEABB2A88",
+        "Roles": [
+          {
+            "Ref": "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaServiceRole478CBC0A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "pipelinewithchangecontrolchangecontrollerSourceSchedulerAA2C7753": {
+      "Properties": {
+        "Name": {
+          "Ref": "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaD899ECB0",
+        },
+        "ScheduleExpression": "rate(1 minute)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaD899ECB0",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+            "Input": {
+              "Fn::Join": [
+                "",
+                [
+                  "{"calendar":{"calendarArn":"arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":document/calendar.ics","calendarName":"calendar.ics"},"searchTerms":["no-deploy","change-controller-error-alarm"],"stageName":"Source","pipelineName":"",
+                  {
+                    "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+                  },
+                  ""}",
+                ],
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "pipelinewithchangecontrolchangecontrollerSourceSchedulerAllowEventRuletestpipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaB17182A46AF041B9": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaD899ECB0",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "pipelinewithchangecontrolchangecontrollerSourceSchedulerAA2C7753",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "pipelinewithchangecontrolchangecontrollerSourcechangecontrolleralarmAF8B93FC": {
+      "Properties": {
+        "AlarmDescription": "change-controller-error-alarm",
+        "AlarmName": {
+          "Fn::Join": [
+            "",
+            [
+              "ChangeController-",
+              {
+                "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+              },
+              "Source",
+            ],
+          ],
+        },
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": {
+              "Ref": "pipelinewithchangecontrolchangecontrollerSourceChangeControllerLambdaD899ECB0",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "breaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "workshoprepo93162093": {
+      "Properties": {
+        "Code": {
+          "BranchName": "main",
+          "S3": {
+            "Bucket": {
+              "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+            },
+            "Key": "3785633d58691317a2a415753c288dc057402c55353981d8c5760fd1d73bc9af.zip",
+          },
+        },
+        "RepositoryName": "workshop-repo",
+      },
+      "Type": "AWS::CodeCommit::Repository",
+    },
+    "workshoprepotestpipelinewithchangecontrolPipeline63962D06mainEventRule41AE6D29": {
+      "Properties": {
+        "EventPattern": {
+          "detail": {
+            "event": [
+              "referenceCreated",
+              "referenceUpdated",
+            ],
+            "referenceName": [
+              "main",
+            ],
+          },
+          "detail-type": [
+            "CodeCommit Repository State Change",
+          ],
+          "resources": [
+            {
+              "Fn::GetAtt": [
+                "workshoprepo93162093",
+                "Arn",
+              ],
+            },
+          ],
+          "source": [
+            "aws.codecommit",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":codepipeline:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":",
+                  {
+                    "Ref": "pipelinewithchangecontrolPipeline64D5ED6C",
+                  },
+                ],
+              ],
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "pipelinewithchangecontrolPipelineEventsRoleE5CF1194",
+                "Arn",
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
